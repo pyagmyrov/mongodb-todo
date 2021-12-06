@@ -62,25 +62,11 @@ app.post("/add", async (req, res) => {
   });
 
 
-app.put("/update", async (req, res) => {
+app.put("/toggleTasks", async (req, res) => {
     try {
-        var data;
-        if(req.body.task && !req.body.isDone){
-            data = {
-                task:req.body.task
-            }
-        }else if(!req.body.task && req.body.isDone){
-            data = {
-                isDone:req.body.isDone
-            }
-        }else if(req.body.task && req.body.isDone){
-            data = {
-                task:req.body.task,
-                isDone:req.body.isDone
-            }
-        }
+       
       const todos =  db.collection("todo");
-        await todos.updateOne({_id: mongodb.ObjectId(req.body.id)},{$set: data})
+        await todos.updateOne({_id: mongodb.ObjectId(req.body.id)},{$set: {isDone:req.body.isDone}})
         res.status = 200;
         res.send("Updated!")
     } catch (err) {
