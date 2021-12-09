@@ -71,27 +71,34 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  try {
-    const user = await db
-      .collection("users")
-      .findOne({ email: req.body.email });
-    if (user) {
-      const match = await bcrypt.compare(req.body.password, user.password);
-      if (match) {
-        res.statusCode = 200;
-        res.send(user);
+ 
+  if (req.body.email) {
+    try {
+      const user = await db
+        .collection("users")
+        .findOne({ email: req.body.email });
+      if (user) {
+        const match = await bcrypt.compare(req.body.password, user.password);
+        if (match) {
+          res.statusCode = 200;
+          res.send(user);
+        } else {
+          res.statusCode = 401;
+          res.send({ status: res.statusCode, msg: "wrongPasswordOrEmail" });
+        }
       } else {
-        res.statusCode = 401;
-        res.send({ status: res.statusCode, msg: "wrongPasswordOrEmail" });
+        res.statusCode = 333;
+        res.send({ status: res.statusCode, msg: "noUserWithThisEmail" });
       }
-    } else {
-      res.statusCode = 333;
-      res.send({ status: res.statusCode, msg: "noUserWithThisEmail" });
+    } catch (err) {
+      res.status = 555;
+      console.log(err);
+      res.send("try again later.");
     }
-  } catch (err) {
-    res.status = 555;
-    console.log(err);
-    res.send("try again later.");
+  } else {
+    res.statusCode == 333;
+    res.status = 333;
+    res.send({ status: 333, msg: "input data missing" });
   }
 });
 
