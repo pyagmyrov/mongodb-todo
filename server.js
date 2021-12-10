@@ -143,6 +143,27 @@ app.get("/all", async (req, res) => {
   }
 });
 
+app.get("/motors", async (req, res) => {
+  try {
+    const motors = await db.collection("motors").find().toArray();
+    if (motors.length) {
+      res.status = 200;
+      res.send(motors);
+    } else {
+      res.status = 200;
+      var response = {
+        status: res.status,
+        message: "No motor",
+      };
+      res.send(response);
+    }
+  } catch (err) {
+    res.status = 555;
+    console.log(err);
+    res.send("try again later.");
+  }
+});
+
 // app.put("/toggleTasks", async (req, res) => {
 //   try {
 //     const todos = db.collection("users");
